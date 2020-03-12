@@ -34,9 +34,10 @@ public class BufferedWriter {
         if (currentSize >= MAX_SIZE) {
             String toWrite = buffer.toString();
             while (lock.getAndSet(true)) {
-                tasks.add(executorService.submit(() -> new WriteTask(FILE_PATH).write(toWrite)));
-                lock.set(false);
+
             }
+            tasks.add(executorService.submit(() -> new WriteTask(FILE_PATH).write(toWrite)));
+            lock.set(false);
             cleanTasks();
             currentSize = 0;
             buffer.setLength(0);
