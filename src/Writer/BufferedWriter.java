@@ -37,9 +37,7 @@ public class BufferedWriter {
     }
 
     public void writeFinal(String str) {
-        while (lock.getAndSet(true)) {
-
-        }
+        flush();
         cancelTasks();
         Future<?> write = executorService.submit(() -> new WriteTask(FILE_PATH).write(str));
         try {
@@ -67,9 +65,11 @@ public class BufferedWriter {
     }
 
     private void cancelTasks() {
+        while (lock.getAndSet(true)) {}
         for (Iterator<Future<?>> it = tasks.descendingIterator(); it.hasNext(); ) {
             it.next().cancel(false);
         }
+        lock.set(false);
     }
 
     private void cleanTasks() {

@@ -4,7 +4,7 @@ public class ShutdownHook extends Thread {
 
     private final String END_CODE =
             "        }\n" +
-            "        return false;\n" +
+            "        throw new IllegalArgumentException(\"Number too bic\");\n" +
             "    }\n" +
             "}";
     private BufferedWriter writer;
