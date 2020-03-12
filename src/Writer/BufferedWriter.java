@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BufferedWriter {
 
-    private final int MAX_SIZE = 100;
+    private final int MAX_SIZE = 1000000;
     private final String FILE_PATH;
     private int currentSize;
     private ExecutorService executorService;
@@ -32,15 +32,7 @@ public class BufferedWriter {
         currentSize++;
         buffer.append(str).append("\n");
         if (currentSize >= MAX_SIZE) {
-            String toWrite = buffer.toString();
-            while (lock.getAndSet(true)) {
-
-            }
-            tasks.add(executorService.submit(() -> new WriteTask(FILE_PATH).write(toWrite)));
-            lock.set(false);
-            cleanTasks();
-            currentSize = 0;
-            buffer.setLength(0);
+            flush();
         }
     }
 
@@ -55,6 +47,18 @@ public class BufferedWriter {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public void flush() {
+        String toWrite = buffer.toString();
+        while (lock.getAndSet(true)) {
+
+        }
+        tasks.add(executorService.submit(() -> new WriteTask(FILE_PATH).write(toWrite)));
+        lock.set(false);
+        cleanTasks();
+        currentSize = 0;
+        buffer.setLength(0);
     }
 
     public void close() {

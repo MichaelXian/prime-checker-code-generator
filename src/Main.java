@@ -25,6 +25,7 @@ public class Main {
                     String.format("            case %d: return %b;", c.get(), isPrime(c.get()))
             );
         }
+        writer.flush();
     }
 
     private static void clearFile() {
