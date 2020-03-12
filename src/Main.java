@@ -25,7 +25,6 @@ public class Main {
                     String.format("            case %d: return %b;", c.get(), isPrime(c.get()))
             );
         }
-        shutdownHook.start();
     }
 
     private static void clearFile() {
