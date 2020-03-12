@@ -1,7 +1,7 @@
 package Writer;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,7 +12,7 @@ public class BufferedWriter {
     private final int MAX_SIZE = 100;
     private int currentSize;
     private ExecutorService executorService;
-    private Queue<Future<?>> tasks;
+    private LinkedList<Future<?>> tasks;
     private StringBuilder buffer;
 
     public BufferedWriter() {
@@ -26,7 +26,8 @@ public class BufferedWriter {
         currentSize++;
         buffer.append(str).append("\n");
         if (currentSize >= MAX_SIZE) {
-            tasks.offer(executorService.submit(() -> new WriteTask().write(buffer.toString())));
+            String toWrite = buffer.toString();
+            tasks.add(executorService.submit(() -> new WriteTask().write(toWrite)));
             cleanTasks();
             currentSize = 0;
             buffer.setLength(0);
@@ -49,8 +50,8 @@ public class BufferedWriter {
     }
 
     private void cancelTasks() {
-        while (!tasks.isEmpty()) {
-            tasks.poll().cancel(false);
+        for (Iterator<Future<?>> it = tasks.descendingIterator(); it.hasNext(); ) {
+            it.next().cancel(false);
         }
     }
 

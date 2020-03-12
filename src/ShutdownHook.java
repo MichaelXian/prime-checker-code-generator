@@ -16,6 +16,7 @@ public class ShutdownHook extends Thread {
     }
 
     public void run() {
+        System.out.println("Shutting down");
         writer.writeFinal(END_CODE);
         writer.close();
         System.out.println("Current counter: " + counter.get());
