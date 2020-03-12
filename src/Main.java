@@ -14,13 +14,13 @@ public class Main {
             "        switch (i) {";
 
     public static void main(String[] args) {
-        Counter c = new Counter();
+        Counter c = new Counter(2);
         BufferedWriter writer = new BufferedWriter(FILE_PATH);
         ShutdownHook shutdownHook = new ShutdownHook(writer, c);
         Runtime.getRuntime().addShutdownHook(shutdownHook);
         clearFile();
         writer.write(START_CODE);
-        for (; c.get() < Integer.MAX_VALUE; c.increment()) {
+        for (; c.get() < 2500000; c.increment()) {
             writer.write(
                     String.format("            case %d: return %b;", c.get(), isPrime(c.get()))
             );
