@@ -26,6 +26,7 @@ public class Main {
             );
         }
         writer.flush();
+        shutdownHook.start();
     }
 
     private static void clearFile() {
