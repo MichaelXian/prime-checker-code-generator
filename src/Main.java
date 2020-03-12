@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         Counter c = new Counter();
-        BufferedWriter writer = new BufferedWriter();
+        BufferedWriter writer = new BufferedWriter(FILE_PATH);
         ShutdownHook shutdownHook = new ShutdownHook(writer, c);
         Runtime.getRuntime().addShutdownHook(shutdownHook);
         clearFile();
